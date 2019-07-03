@@ -1,0 +1,19 @@
+.digits {
+    display: inline-block;
+    height: 30px;
+    margin-right: 50px;
+}
+
+.digits i {
+    background: url(numbers.png) no-repeat;
+    display: inline-block;
+    height: 30px;
+    width: 18px;
+}
+
+.digits b {
+    background: url(numbers.png) no-repeat 0 -398px;
+    display: inline-block;
+    height: 30px;
+    width: 10px;
+}
