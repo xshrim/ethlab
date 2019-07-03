@@ -1,0 +1,30 @@
+=============== Jul 2, 2019 (CST) ===============
+12:37:59.343549 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+12:37:59.349282 db@open opening
+12:37:59.350411 version@stat F·[] S·0B[] Sc·[]
+12:37:59.355921 db@janitor F·2 G·0
+12:37:59.355992 db@open done T·6.67725ms
+=============== Jul 2, 2019 (CST) ===============
+13:13:16.147474 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+13:13:16.147898 version@stat F·[] S·0B[] Sc·[]
+13:13:16.147907 db@open opening
+13:13:16.147961 journal@recovery F·1
+13:13:16.150071 journal@recovery recovering @1
+13:13:16.155415 memdb@flush created L0@2 N·628 S·51KiB "\x02d\xfc..\x19Ba,v437":"\xfe\x88\xcf..H\xef\xcc,v367"
+13:13:16.158504 version@stat F·[1] S·51KiB[51KiB] Sc·[0.25]
+13:13:16.168110 db@janitor F·3 G·0
+13:13:16.168143 db@open done T·20.227839ms
+13:13:16.273371 db@close closing
+13:13:16.273438 db@close done T·65.417µs
+=============== Jul 2, 2019 (CST) ===============
+13:13:51.934685 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+13:13:51.934954 version@stat F·[1] S·51KiB[51KiB] Sc·[0.25]
+13:13:51.934971 db@open opening
+13:13:51.935021 journal@recovery F·1
+13:13:51.938478 journal@recovery recovering @3
+13:13:51.942716 memdb@flush created L0@5 N·3 S·543B "Dat..ion,v630":"cli..u\xf0\x0f,v632"
+13:13:51.945253 version@stat F·[2] S·51KiB[51KiB] Sc·[0.50]
+13:13:51.955071 db@janitor F·4 G·0
+13:13:51.955116 db@open done T·20.12435ms
+13:18:21.165300 db@close closing
+13:18:21.166267 db@close done T·4.89354ms
