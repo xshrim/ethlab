@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+1. 执行ganache-cli, 运行区块链网络:
+    ganache-cli --accounts=5 --defaultBalanceEther=10000 --gasPrice=0 --gasLimit 0xfffffffffff
+2. 安装metamask, 在metamask上连接ganache-cli运行的的区块链网络, 导入私钥.
+3. 部署合约:
+    python3 tool.py -d -u http://127.0.0.1:8545 -f Coop.sol -o Coop.json -a go
+-->
+
+<head>
+    <meta charset="utf-8">
+    <title>测试ethereum with metamask</title>
+    <script src="./web3.js">
+    </script>
+    <script>
+        window.addEventListener('load', function () {
+            var addr = "0xc363673c4d9E2a58004324234e3B27e002d0028d";
+            var abi = [{
+                "constant": true,
+                "inputs": [{
+                    "name": "id",
+                    "type": "bytes32"
+                }, {
+                    "name": "idx",
+                    "type": "uint256"
+                }],
+                "name": "getModuleId",
+                "outputs": [{
+                    "name": "",
+                    "type": "bytes32"
+                }],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            }, {
+                "constant": false,
+                "inputs": [{
+                    "name": "id",
+                    "type": "bytes32"
+                }, {
+                    "name": "claimer",
+                    "type": "address"
+                }],
+                "name": "claimSign",
+                "outputs": [{
+                    "name": "",
+                    "type": "bool"
+                }],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "function"
+            }, {
+                "constant": true,
+                "inputs": [],
+                "name": "getProjectNum",
+                "outputs": [{
+                    "name": "",
+                    "type": "uint256"
+                }],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            }, {
+                "constant": false,
+                "inputs": [{
+                    "name": "id",
+                    "type": "bytes32"
+                }, {
+                    "name": "price",
+                    "type": "uint256"
+                }],
+                "name": "setPrice",
+                "outputs": [{
+                    "name": "",
+                    "type": "bool"
+                }],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "function"
+            }, {
+                "constant": false,
+                "inputs": [{
+                    "name": "pid",
+                    "type": "bytes32"
+                }, {
+                    "name": "title",
+                    "type": "string"
+                }, {
+                    "name": "cata",
+                    "type": "string"
+                }, {
+                    "name": "desc",
+                    "type": "string"
+                }, {
+                    "name": "attachment",
+                    "type": "string"
+                }, {
+                    "name": "pratio",
+                    "type": "uint256"
+                }],
+                "name": "publish",
+                "outputs": [{
+                    "name": "",
+                    "type": "bool"
+                }],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "function"
+            }, {
+                "constant": false,
+                "inputs": [{
+                    "name": "id",
+                    "type": "bytes32"
+                }],
+                "name": "claimDeliver",
+                "outputs": [{
+                    "name": "",
+                    "type": "bool"
+                }],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "function"
+            }, {
+                "constant": false,
+                "inputs": [{
+                    "name": "id",
+                    "type": "bytes32"
+                }],
+                "name": "projectComplete",
+                "outputs": [{
+                    "name": "",
+                    "type": "bool"
+                }],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "function"
+            }, {
+                "constant": true,
+                "inputs": [{
+                    "name": "idx",
+                    "type": "uint256"
+                }],
+                "name": "getProjectId",
+                "outputs": [{
+                    "name": "",
+                    "type": "bytes32"
+                }],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            }, {
+                "constant": true,
+                "inputs": [{
+                    "name": "id",
+                    "type": "bytes32"
+                }],
+                "name": "getProject",
+                "outputs": [{
+                    "name": "",
+                    "type": "bytes32"
+                }, {
+                    "name": "",
+                    "type": "bytes32"
+                }, {
+                    "name": "",
+                    "type": "address"
+                }, {
+                    "name": "",
+                    "type": "string"
+                }, {
+                    "name": "",
+                    "type": "string"
+                }, {
+                    "name": "",
+                    "type": "string"
+                }, {
+                    "name": "",
+                    "type": "string"
+                }, {
+                    "name": "",
+                    "type": "uint256"
+                }, {
+                    "name": "",
+                    "type": "uint256[2]"
+                }, {
+                    "name": "",
+                    "type": "uint256"
+                }, {
+                    "name": "",
+                    "type": "uint256"
+                }],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            }, {
+                "constant": true,
+                "inputs": [],
+                "name": "version",
+                "outputs": [{
+                    "name": "",
+                    "type": "string"
+                }],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            }, {
+                "constant": true,
+                "inputs": [{
+                    "name": "",
+                    "type": "address"
+                }, {
+                    "name": "",
+                    "type": "uint256"
+                }],
+                "name": "tasks",
+                "outputs": [{
+                    "name": "",
+                    "type": "bytes32"
+                }],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            }, {
+                "constant": true,
+                "inputs": [{
+                    "name": "id",
+                    "type": "bytes32"
+                }, {
+                    "name": "idx",
+                    "type": "uint256"
+                }],
+                "name": "getClaimerAddr",
+                "outputs": [{
+                    "name": "",
+                    "type": "address"
+                }],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            }, {
+                "constant": false,
+                "inputs": [{
+                    "name": "id",
+                    "type": "bytes32"
+                }, {
+                    "name": "ok",
+                    "type": "bool"
+                }],
+                "name": "deliverySign",
+                "outputs": [{
+                    "name": "",
+                    "type": "bool"
+                }],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "function"
+            }, {
+                "constant": true,
+                "inputs": [],
+                "name": "owner",
+                "outputs": [{
+                    "name": "",
+                    "type": "address"
+                }],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            }, {
+                "constant": true,
+                "inputs": [],
+                "name": "getTaskNum",
+                "outputs": [{
+                    "name": "",
+                    "type": "uint256"
+                }],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            }, {
+                "constant": true,
+                "inputs": [{
+                    "name": "",
+                    "type": "bytes32"
+                }],
+                "name": "projects",
+                "outputs": [{
+                    "name": "id",
+                    "type": "bytes32"
+                }, {
+                    "name": "pid",
+                    "type": "bytes32"
+                }, {
+                    "name": "sponsor",
+                    "type": "address"
+                }, {
+                    "name": "title",
+                    "type": "string"
+                }, {
+                    "name": "cata",
+                    "type": "string"
+                }, {
+                    "name": "desc",
+                    "type": "string"
+                }, {
+                    "name": "attachment",
+                    "type": "string"
+                }, {
+                    "name": "pratio",
+                    "type": "uint256"
+                }, {
+                    "name": "status",
+                    "type": "uint256"
+                }, {
+                    "name": "timestamp",
+                    "type": "uint256"
+                }],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            }, {
+                "constant": false,
+                "inputs": [{
+                    "name": "id",
+                    "type": "bytes32"
+                }],
+                "name": "claim",
+                "outputs": [{
+                    "name": "",
+                    "type": "bool"
+                }],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "function"
+            }, {
+                "constant": false,
+                "inputs": [{
+                    "name": "id",
+                    "type": "bytes32"
+                }],
+                "name": "purchase",
+                "outputs": [{
+                    "name": "",
+                    "type": "bool"
+                }],
+                "payable": true,
+                "stateMutability": "payable",
+                "type": "function"
+            }, {
+                "constant": false,
+                "inputs": [{
+                    "name": "sn",
+                    "type": "bytes32"
+                }, {
+                    "name": "id",
+                    "type": "bytes32"
+                }, {
+                    "name": "pratio",
+                    "type": "uint256"
+                }],
+                "name": "liquidate",
+                "outputs": [{
+                    "name": "",
+                    "type": "bool"
+                }],
+                "payable": true,
+                "stateMutability": "payable",
+                "type": "function"
+            }, {
+                "constant": true,
+                "inputs": [{
+                    "name": "idx",
+                    "type": "uint256"
+                }],
+                "name": "getTaskId",
+                "outputs": [{
+                    "name": "",
+                    "type": "bytes32"
+                }],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            }, {
+                "constant": true,
+                "inputs": [{
+                    "name": "",
+                    "type": "uint256"
+                }],
+                "name": "idxtoids",
+                "outputs": [{
+                    "name": "",
+                    "type": "bytes32"
+                }],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            }, {
+                "constant": false,
+                "inputs": [{
+                    "name": "id",
+                    "type": "bytes32"
+                }],
+                "name": "projectCancel",
+                "outputs": [{
+                    "name": "",
+                    "type": "bool"
+                }],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "function"
+            }, {
+                "inputs": [{
+                    "name": "ver",
+                    "type": "string"
+                }],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "constructor"
+            }, {
+                "anonymous": false,
+                "inputs": [{
+                    "indexed": true,
+                    "name": "sn",
+                    "type": "bytes32"
+                }, {
+                    "indexed": true,
+                    "name": "from",
+                    "type": "address"
+                }, {
+                    "indexed": true,
+                    "name": "itemid",
+                    "type": "bytes32"
+                }, {
+                    "indexed": false,
+                    "name": "to",
+                    "type": "address"
+                }, {
+                    "indexed": false,
+                    "name": "action",
+                    "type": "string"
+                }, {
+                    "indexed": false,
+                    "name": "amount",
+                    "type": "uint256"
+                }, {
+                    "indexed": false,
+                    "name": "timestamp",
+                    "type": "uint256"
+                }, {
+                    "indexed": false,
+                    "name": "details",
+                    "type": "string"
+                }],
+                "name": "Receipt",
+                "type": "event"
+            }];
+            // Check if Web3 has been injected by the browser:
+            if (window.web3) {
+                // Then replace the old injected version by the latest build of Web3.js version 1.0.0
+                window.web3 = new Web3(window.web3.currentProvider); // 升级web3 0.x 到web3 1.0
+
+                var myContract = new web3.eth.Contract(abi, addr);
+
+                var evtctx = null;
+                for (var idx in abi) { // 从abi获取事件数据结构
+                    var obj = abi[idx];
+                    if (obj["name"] == "Receipt") {
+                        evtctx = obj["inputs"];
+                        console.log(evtctx);
+                    }
+                }
+
+                /*
+                let myContract = new web3.eth.Contract(abi, addr);
+                let amount = 1;
+                amount = web3.utils.toWei(amount.toString(), 'ether');
+                let response = await myContract.methods
+                    .createPayment(1, address)  //function in contract
+                    .send({
+                    from: window.web3.currentProvider.selectedAddress,
+                    to: address,
+                    value: amount,
+                    gasPrice: '20000000000' 
+                    });
+                console.log("response: ", response);
+                */
+
+                // call
+                myContract.methods.getProjectId(0).call({
+                    from: window.web3.currentProvider.selectedAddress
+                }, (error, result) => {
+                    console.log(result);
+                    myContract.methods.getProject(result).call({
+                        from: window.web3.currentProvider.selectedAddress
+                    }, (err, res) => {
+                        console.log(res);
+                    });
+                });
+                /*
+                myContract.methods.getProject(
+                        "0xc6c6a85b43c8e9061d3502fbf406f9880e98cc338fe9c53f9c15d93a0b4ca4a4").call({
+                        from: window.web3.currentProvider.selectedAddress
+                    }, (err, res) => {
+                        console.log(err);
+                        console.log(res);
+                    });
+                */
+
+                // send
+                //myContract.methods.publish(web3.utils.asciiToHex("", 32), "title", "cata", "desc", "", 100)
+                myContract.methods.publish("0x00", "title", "cata", "desc", "", 100)
+                    .send({
+                        from: window.web3.currentProvider.selectedAddress
+                    })
+                    .on('transactionHash', (hash) => {
+
+                    })
+                    .on('confirmation', (confirmationNumber, receipt) => {
+
+                    })
+                    .on('receipt', (receipt) => {
+                        // receipt example
+                        console.log(receipt.events["Receipt"]); // 打印回执中的指定事件
+
+                        var evt = receipt.events["Receipt"];
+                        if (evtctx != null) {
+                            /*
+                            [{
+                                "indexed": true,
+                                "name": "sn",
+                                "type": "bytes32"
+                            }, {
+                                "indexed": true,
+                                "name": "from",
+                                "type": "address"
+                            }, {
+                                "indexed": true,
+                                "name": "itemid",
+                                "type": "bytes32"
+                            }, {
+                                "indexed": false,
+                                "name": "to",
+                                "type": "address"
+                            }, {
+                                "indexed": false,
+                                "name": "action",
+                                "type": "string"
+                            }, {
+                                "indexed": false,
+                                "name": "amount",
+                                "type": "uint256"
+                            }, {
+                                "indexed": false,
+                                "name": "timestamp",
+                                "type": "uint256"
+                            }, {
+                                "indexed": false,
+                                "name": "details",
+                                "type": "string"
+                            }]
+                            */
+
+                            console.log(web3.eth.abi.decodeLog(evtctx, // 解析并打印事件内数据
+                                evt.raw.data,
+                                evt.raw.topics.slice(1)));
+                        }
+
+                    })
+                    .on('error', console.error);
+
+            } else {
+                console.log("no wallet");
+                // Warn the user that they need to get a web3 browser
+                // Or install MetaMask, maybe with a nice graphic.
+            }
+
+            // for web3 0.x
+            /*
+            if (typeof web3 !== 'undefined') {
+                // You have a web3 browser! Continue below!
+                console.log("ok");
+
+                //const accounts = await ethereum.enable();
+                console.log(web3.eth.accounts);
+                web3 = new Web3(web3.currentProvider);
+                console.log(web3.version);
+
+                const contractInstance = new web3.eth.Contract(abi).at(addr);
+                contractInstance.publish(0x00, "title", "cata", "desc", "", 100, {
+                    from: web3.currentProvider.selectedAddress
+                }, (err, res) => {
+                    console.log(res);
+
+                });
+                contractInstance.getProjectNum({
+                    from: web3.currentProvider.selectedAddress
+                }, (err, res) => {
+                    console.log(res)
+                });
+            } else {
+                console.log("no")
+                // Warn the user that they need to get a web3 browser
+                // Or install MetaMask, maybe with a nice graphic.
+            }
+            */
+        })
+
+        function displayDate() {
+            document.getElementById("demo").innerHTML = Date();
+        }
+    </script>
+</head>
+
+<body>
+
+    <h1>我的第一个 JavaScript 程序</h1>
+    <p id="demo">这是一个段落</p>
+
+    <button type="button" onclick="displayDate()">显示日期</button>
+
+</body>
+
+</html>
