@@ -248,7 +248,11 @@ contract Coop {
             // 判断父项目是否存在以及状态是否允许添加子项目
             //require(pproj.id != 0x00, "parent project id can not be empty");
 
-            require(pproj.status == 1, "parent project status must be 1");
+            if (pproj.pid == 0x00) {   // 父项目是顶级项目
+                require(pproj.status == 1, "parent project status must be 1");
+            } else {
+                require(pproj.status == 2, "parent project status must be 2");
+            }
 
             //require(pproj.sponsor == msg.sender, "msg sender must be sponsor of parent project"); // 只有父项目发起人才能发布子项目
             confine(pproj.id, pproj.sponsor, true, "msg sender must be sponsor of parent project");
