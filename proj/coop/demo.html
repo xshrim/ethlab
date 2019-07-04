@@ -7,6 +7,8 @@
 2. 安装metamask, 在metamask上连接ganache-cli运行的的区块链网络, 导入私钥.
 3. 部署合约:
     python3 tool.py -d -u http://127.0.0.1:8545 -f Coop.sol -o Coop.json -a go
+4. 当前目录下启动web服务(metamask不支持本地网页, 必须以web服务的形式访问):
+    python3 -m http.server     # 访问127.0.0.1:8080/demo.html
 -->
 
 <head>
