@@ -897,7 +897,7 @@ def purchase(id=None):
     txreceipthash = contract.functions.purchase(id).transact(params)
     txreceipt = w3.eth.waitForTransactionReceipt(txreceipthash)
     print(txreceipt)
-addProject()
+#addProject()
 #addSubProject()
 #claimProject("0x3e896fac33d1b715b06ced07e9be871c9c957017afc596a8ef347f600c01a823")
 #claimSign("0x3e896fac33d1b715b06ced07e9be871c9c957017afc596a8ef347f600c01a823", w3.eth.accounts[1])
@@ -905,6 +905,11 @@ addProject()
 #deliverySign("0x3e896fac33d1b715b06ced07e9be871c9c957017afc596a8ef347f600c01a823", True)
 #projectComplete()
 #purchase()
+
+txreceipt = w3.eth.waitForTransactionReceipt(txreceipthash)
+print(txreceipt)
+
+os._exit()
 
 params = {'from': w3.eth.coinbase, 'gas': w3.eth.getBlock('latest').gasLimit}
 

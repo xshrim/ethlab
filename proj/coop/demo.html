@@ -9,6 +9,9 @@
     python3 tool.py -d -u http://127.0.0.1:8545 -f Coop.sol -o Coop.json -a go
 4. 当前目录下启动web服务(metamask不支持本地网页, 必须以web服务的形式访问):
     python3 -m http.server     # 访问127.0.0.1:8080/demo.html
+5. 在控制台为账号充值:
+    amount = web3.toWei(5,'ether')
+    
 -->
 
 <head>
@@ -18,445 +21,8 @@
     </script>
     <script>
         window.addEventListener('load', function () {
-            var addr = "0xc363673c4d9E2a58004324234e3B27e002d0028d";
-            var abi = [{
-                "constant": true,
-                "inputs": [{
-                    "name": "id",
-                    "type": "bytes32"
-                }, {
-                    "name": "idx",
-                    "type": "uint256"
-                }],
-                "name": "getModuleId",
-                "outputs": [{
-                    "name": "",
-                    "type": "bytes32"
-                }],
-                "payable": false,
-                "stateMutability": "view",
-                "type": "function"
-            }, {
-                "constant": false,
-                "inputs": [{
-                    "name": "id",
-                    "type": "bytes32"
-                }, {
-                    "name": "claimer",
-                    "type": "address"
-                }],
-                "name": "claimSign",
-                "outputs": [{
-                    "name": "",
-                    "type": "bool"
-                }],
-                "payable": false,
-                "stateMutability": "nonpayable",
-                "type": "function"
-            }, {
-                "constant": true,
-                "inputs": [],
-                "name": "getProjectNum",
-                "outputs": [{
-                    "name": "",
-                    "type": "uint256"
-                }],
-                "payable": false,
-                "stateMutability": "view",
-                "type": "function"
-            }, {
-                "constant": false,
-                "inputs": [{
-                    "name": "id",
-                    "type": "bytes32"
-                }, {
-                    "name": "price",
-                    "type": "uint256"
-                }],
-                "name": "setPrice",
-                "outputs": [{
-                    "name": "",
-                    "type": "bool"
-                }],
-                "payable": false,
-                "stateMutability": "nonpayable",
-                "type": "function"
-            }, {
-                "constant": false,
-                "inputs": [{
-                    "name": "pid",
-                    "type": "bytes32"
-                }, {
-                    "name": "title",
-                    "type": "string"
-                }, {
-                    "name": "cata",
-                    "type": "string"
-                }, {
-                    "name": "desc",
-                    "type": "string"
-                }, {
-                    "name": "attachment",
-                    "type": "string"
-                }, {
-                    "name": "pratio",
-                    "type": "uint256"
-                }],
-                "name": "publish",
-                "outputs": [{
-                    "name": "",
-                    "type": "bool"
-                }],
-                "payable": false,
-                "stateMutability": "nonpayable",
-                "type": "function"
-            }, {
-                "constant": false,
-                "inputs": [{
-                    "name": "id",
-                    "type": "bytes32"
-                }],
-                "name": "claimDeliver",
-                "outputs": [{
-                    "name": "",
-                    "type": "bool"
-                }],
-                "payable": false,
-                "stateMutability": "nonpayable",
-                "type": "function"
-            }, {
-                "constant": false,
-                "inputs": [{
-                    "name": "id",
-                    "type": "bytes32"
-                }],
-                "name": "projectComplete",
-                "outputs": [{
-                    "name": "",
-                    "type": "bool"
-                }],
-                "payable": false,
-                "stateMutability": "nonpayable",
-                "type": "function"
-            }, {
-                "constant": true,
-                "inputs": [{
-                    "name": "idx",
-                    "type": "uint256"
-                }],
-                "name": "getProjectId",
-                "outputs": [{
-                    "name": "",
-                    "type": "bytes32"
-                }],
-                "payable": false,
-                "stateMutability": "view",
-                "type": "function"
-            }, {
-                "constant": true,
-                "inputs": [{
-                    "name": "id",
-                    "type": "bytes32"
-                }],
-                "name": "getProject",
-                "outputs": [{
-                    "name": "",
-                    "type": "bytes32"
-                }, {
-                    "name": "",
-                    "type": "bytes32"
-                }, {
-                    "name": "",
-                    "type": "address"
-                }, {
-                    "name": "",
-                    "type": "string"
-                }, {
-                    "name": "",
-                    "type": "string"
-                }, {
-                    "name": "",
-                    "type": "string"
-                }, {
-                    "name": "",
-                    "type": "string"
-                }, {
-                    "name": "",
-                    "type": "uint256"
-                }, {
-                    "name": "",
-                    "type": "uint256[2]"
-                }, {
-                    "name": "",
-                    "type": "uint256"
-                }, {
-                    "name": "",
-                    "type": "uint256"
-                }],
-                "payable": false,
-                "stateMutability": "view",
-                "type": "function"
-            }, {
-                "constant": true,
-                "inputs": [],
-                "name": "version",
-                "outputs": [{
-                    "name": "",
-                    "type": "string"
-                }],
-                "payable": false,
-                "stateMutability": "view",
-                "type": "function"
-            }, {
-                "constant": true,
-                "inputs": [{
-                    "name": "",
-                    "type": "address"
-                }, {
-                    "name": "",
-                    "type": "uint256"
-                }],
-                "name": "tasks",
-                "outputs": [{
-                    "name": "",
-                    "type": "bytes32"
-                }],
-                "payable": false,
-                "stateMutability": "view",
-                "type": "function"
-            }, {
-                "constant": true,
-                "inputs": [{
-                    "name": "id",
-                    "type": "bytes32"
-                }, {
-                    "name": "idx",
-                    "type": "uint256"
-                }],
-                "name": "getClaimerAddr",
-                "outputs": [{
-                    "name": "",
-                    "type": "address"
-                }],
-                "payable": false,
-                "stateMutability": "view",
-                "type": "function"
-            }, {
-                "constant": false,
-                "inputs": [{
-                    "name": "id",
-                    "type": "bytes32"
-                }, {
-                    "name": "ok",
-                    "type": "bool"
-                }],
-                "name": "deliverySign",
-                "outputs": [{
-                    "name": "",
-                    "type": "bool"
-                }],
-                "payable": false,
-                "stateMutability": "nonpayable",
-                "type": "function"
-            }, {
-                "constant": true,
-                "inputs": [],
-                "name": "owner",
-                "outputs": [{
-                    "name": "",
-                    "type": "address"
-                }],
-                "payable": false,
-                "stateMutability": "view",
-                "type": "function"
-            }, {
-                "constant": true,
-                "inputs": [],
-                "name": "getTaskNum",
-                "outputs": [{
-                    "name": "",
-                    "type": "uint256"
-                }],
-                "payable": false,
-                "stateMutability": "view",
-                "type": "function"
-            }, {
-                "constant": true,
-                "inputs": [{
-                    "name": "",
-                    "type": "bytes32"
-                }],
-                "name": "projects",
-                "outputs": [{
-                    "name": "id",
-                    "type": "bytes32"
-                }, {
-                    "name": "pid",
-                    "type": "bytes32"
-                }, {
-                    "name": "sponsor",
-                    "type": "address"
-                }, {
-                    "name": "title",
-                    "type": "string"
-                }, {
-                    "name": "cata",
-                    "type": "string"
-                }, {
-                    "name": "desc",
-                    "type": "string"
-                }, {
-                    "name": "attachment",
-                    "type": "string"
-                }, {
-                    "name": "pratio",
-                    "type": "uint256"
-                }, {
-                    "name": "status",
-                    "type": "uint256"
-                }, {
-                    "name": "timestamp",
-                    "type": "uint256"
-                }],
-                "payable": false,
-                "stateMutability": "view",
-                "type": "function"
-            }, {
-                "constant": false,
-                "inputs": [{
-                    "name": "id",
-                    "type": "bytes32"
-                }],
-                "name": "claim",
-                "outputs": [{
-                    "name": "",
-                    "type": "bool"
-                }],
-                "payable": false,
-                "stateMutability": "nonpayable",
-                "type": "function"
-            }, {
-                "constant": false,
-                "inputs": [{
-                    "name": "id",
-                    "type": "bytes32"
-                }],
-                "name": "purchase",
-                "outputs": [{
-                    "name": "",
-                    "type": "bool"
-                }],
-                "payable": true,
-                "stateMutability": "payable",
-                "type": "function"
-            }, {
-                "constant": false,
-                "inputs": [{
-                    "name": "sn",
-                    "type": "bytes32"
-                }, {
-                    "name": "id",
-                    "type": "bytes32"
-                }, {
-                    "name": "pratio",
-                    "type": "uint256"
-                }],
-                "name": "liquidate",
-                "outputs": [{
-                    "name": "",
-                    "type": "bool"
-                }],
-                "payable": true,
-                "stateMutability": "payable",
-                "type": "function"
-            }, {
-                "constant": true,
-                "inputs": [{
-                    "name": "idx",
-                    "type": "uint256"
-                }],
-                "name": "getTaskId",
-                "outputs": [{
-                    "name": "",
-                    "type": "bytes32"
-                }],
-                "payable": false,
-                "stateMutability": "view",
-                "type": "function"
-            }, {
-                "constant": true,
-                "inputs": [{
-                    "name": "",
-                    "type": "uint256"
-                }],
-                "name": "idxtoids",
-                "outputs": [{
-                    "name": "",
-                    "type": "bytes32"
-                }],
-                "payable": false,
-                "stateMutability": "view",
-                "type": "function"
-            }, {
-                "constant": false,
-                "inputs": [{
-                    "name": "id",
-                    "type": "bytes32"
-                }],
-                "name": "projectCancel",
-                "outputs": [{
-                    "name": "",
-                    "type": "bool"
-                }],
-                "payable": false,
-                "stateMutability": "nonpayable",
-                "type": "function"
-            }, {
-                "inputs": [{
-                    "name": "ver",
-                    "type": "string"
-                }],
-                "payable": false,
-                "stateMutability": "nonpayable",
-                "type": "constructor"
-            }, {
-                "anonymous": false,
-                "inputs": [{
-                    "indexed": true,
-                    "name": "sn",
-                    "type": "bytes32"
-                }, {
-                    "indexed": true,
-                    "name": "from",
-                    "type": "address"
-                }, {
-                    "indexed": true,
-                    "name": "itemid",
-                    "type": "bytes32"
-                }, {
-                    "indexed": false,
-                    "name": "to",
-                    "type": "address"
-                }, {
-                    "indexed": false,
-                    "name": "action",
-                    "type": "string"
-                }, {
-                    "indexed": false,
-                    "name": "amount",
-                    "type": "uint256"
-                }, {
-                    "indexed": false,
-                    "name": "timestamp",
-                    "type": "uint256"
-                }, {
-                    "indexed": false,
-                    "name": "details",
-                    "type": "string"
-                }],
-                "name": "Receipt",
-                "type": "event"
-            }];
+            var addr = "0x49adE73608ca3054798D79FCD2C212284a4611Ed";
+            var abi = [{"constant": true, "inputs": [{"name": "id", "type": "bytes32"}, {"name": "idx", "type": "uint256"}], "name": "getModuleId", "outputs": [{"name": "", "type": "bytes32"}], "payable": false, "stateMutability": "view", "type": "function"}, {"constant": false, "inputs": [{"name": "id", "type": "bytes32"}, {"name": "claimer", "type": "address"}], "name": "claimSign", "outputs": [{"name": "", "type": "bool"}], "payable": false, "stateMutability": "nonpayable", "type": "function"}, {"constant": true, "inputs": [], "name": "getProjectNum", "outputs": [{"name": "", "type": "uint256"}], "payable": false, "stateMutability": "view", "type": "function"}, {"constant": false, "inputs": [{"name": "id", "type": "bytes32"}, {"name": "price", "type": "uint256"}], "name": "setPrice", "outputs": [{"name": "", "type": "bool"}], "payable": false, "stateMutability": "nonpayable", "type": "function"}, {"constant": false, "inputs": [{"name": "pid", "type": "bytes32"}, {"name": "title", "type": "string"}, {"name": "cata", "type": "string"}, {"name": "desc", "type": "string"}, {"name": "attachment", "type": "string"}, {"name": "pratio", "type": "uint256"}], "name": "publish", "outputs": [{"name": "", "type": "bool"}], "payable": false, "stateMutability": "nonpayable", "type": "function"}, {"constant": false, "inputs": [{"name": "id", "type": "bytes32"}], "name": "claimDeliver", "outputs": [{"name": "", "type": "bool"}], "payable": false, "stateMutability": "nonpayable", "type": "function"}, {"constant": false, "inputs": [{"name": "id", "type": "bytes32"}], "name": "projectComplete", "outputs": [{"name": "", "type": "bool"}], "payable": false, "stateMutability": "nonpayable", "type": "function"}, {"constant": true,"inputs": [{"name": "idx", "type": "uint256"}], "name": "getProjectId", "outputs": [{"name": "", "type": "bytes32"}], "payable": false, "stateMutability": "view", "type": "function"}, {"constant": true, "inputs": [{"name": "id", "type": "bytes32"}], "name": "getProject", "outputs": [{"name": "", "type": "bytes32"}, {"name": "", "type": "bytes32"}, {"name": "", "type": "address"}, {"name": "", "type": "string"}, {"name": "", "type": "string"}, {"name": "", "type": "string"}, {"name": "", "type": "string"}, {"name": "", "type": "uint256"}, {"name": "", "type": "uint256[2]"}, {"name": "", "type": "uint256"}, {"name": "", "type": "uint256"}], "payable": false, "stateMutability": "view", "type": "function"}, {"constant": true, "inputs": [], "name": "version", "outputs": [{"name": "", "type": "string"}], "payable": false, "stateMutability": "view", "type": "function"}, {"constant": true, "inputs": [{"name": "", "type": "address"}, {"name": "", "type": "uint256"}], "name": "tasks", "outputs":[{"name": "", "type": "bytes32"}], "payable": false, "stateMutability": "view", "type": "function"}, {"constant": true, "inputs": [{"name": "id", "type": "bytes32"}, {"name": "idx", "type": "uint256"}], "name": "getClaimerAddr", "outputs": [{"name": "", "type": "address"}], "payable":false, "stateMutability": "view", "type": "function"}, {"constant": false, "inputs": [{"name": "id", "type": "bytes32"}, {"name": "ok", "type": "bool"}], "name": "deliverySign", "outputs": [{"name": "", "type": "bool"}], "payable": false, "stateMutability": "nonpayable", "type": "function"}, {"constant": true, "inputs": [], "name": "owner", "outputs": [{"name": "", "type": "address"}], "payable": false, "stateMutability": "view", "type": "function"}, {"constant": true, "inputs": [], "name": "getTaskNum", "outputs": [{"name": "", "type": "uint256"}], "payable": false, "stateMutability": "view", "type": "function"}, {"constant": true, "inputs": [{"name": "", "type": "bytes32"}], "name": "projects", "outputs": [{"name": "id", "type": "bytes32"}, {"name": "pid", "type": "bytes32"}, {"name": "sponsor", "type": "address"}, {"name": "title", "type": "string"}, {"name": "cata", "type": "string"}, {"name": "desc", "type": "string"}, {"name": "attachment", "type": "string"}, {"name": "pratio", "type": "uint256"}, {"name": "status", "type": "uint256"}, {"name": "timestamp", "type": "uint256"}], "payable": false, "stateMutability": "view", "type": "function"}, {"constant": false, "inputs": [{"name": "id", "type": "bytes32"}], "name": "claim", "outputs": [{"name": "", "type": "bool"}], "payable": false, "stateMutability": "nonpayable", "type": "function"}, {"constant": false, "inputs": [{"name": "id", "type": "bytes32"}], "name": "purchase", "outputs": [{"name": "", "type": "bool"}], "payable": true, "stateMutability": "payable", "type": "function"}, {"constant": false, "inputs": [{"name": "sn", "type": "bytes32"}, {"name": "id", "type": "bytes32"}, {"name": "pratio", "type": "uint256"}], "name": "liquidate", "outputs": [{"name": "", "type": "bool"}], "payable": true, "stateMutability": "payable", "type": "function"}, {"constant": true, "inputs": [{"name": "idx", "type": "uint256"}], "name": "getTaskId", "outputs": [{"name": "", "type": "bytes32"}], "payable": false, "stateMutability": "view", "type": "function"}, {"constant": true, "inputs": [{"name": "", "type": "uint256"}], "name": "idxtoids", "outputs": [{"name": "", "type": "bytes32"}], "payable": false, "stateMutability": "view", "type": "function"}, {"constant": false, "inputs": [{"name": "id", "type": "bytes32"}], "name": "projectCancel", "outputs": [{"name": "", "type": "bool"}], "payable": false, "stateMutability": "nonpayable", "type": "function"}, {"inputs": [{"name": "ver", "type": "string"}], "payable": false, "stateMutability": "nonpayable", "type": "constructor"}, {"anonymous": false, "inputs": [{"indexed": true, "name": "sn", "type": "bytes32"}, {"indexed": true, "name": "from", "type": "address"}, {"indexed": true, "name": "itemid", "type": "bytes32"}, {"indexed": false, "name": "to", "type": "address"}, {"indexed": false, "name": "action", "type": "string"}, {"indexed": false, "name": "amount", "type": "uint256"}, {"indexed": false, "name": "timestamp", "type": "uint256"}, {"indexed": false, "name": "details", "type": "string"}], "name": "Receipt", "type": "event"}];
             // Check if Web3 has been injected by the browser:
             if (window.web3) {
                 // Then replace the old injected version by the latest build of Web3.js version 1.0.0
@@ -489,6 +55,7 @@
                 */
 
                 // call
+                /*
                 myContract.methods.getProjectId(0).call({
                     from: window.web3.currentProvider.selectedAddress
                 }, (error, result) => {
@@ -499,6 +66,8 @@
                         console.log(res);
                     });
                 });
+                */
+                
                 /*
                 myContract.methods.getProject(
                         "0xc6c6a85b43c8e9061d3502fbf406f9880e98cc338fe9c53f9c15d93a0b4ca4a4").call({
@@ -509,9 +78,44 @@
                     });
                 */
 
+                //proj1: "0x362574bfe56686af9a5d3b4976b097828e1cb24b0dfaf0b9d345e9a68d0c6c25"
+                //spon1: 0xe0c189af70e9970ba910bc3f300b60318ab9e44e
+                //proj2: "0xa29cc08148d687700ed0e0b7c5359cea2206dd35858e479b86fc3c3e1273f8bb"
+                //spon2: 0xc416dc5fac94191afac6f7a73b9c0c71b7e90bc4
+                //proj3: "0x877245f210f39765a5b3508dbb58f9048a4dd1c9bb0ecd1d538117c632b0420a"
+                //spon3: 0x2ff650f92e352acb95545a01a67501c498e50a9c
+
+                //const amount = web3.toWei(0.5, 'ether');
+
+                myContract.methods.purchase("0x362574bfe56686af9a5d3b4976b097828e1cb24b0dfaf0b9d345e9a68d0c6c25")
+                    .send({
+                        from: window.web3.currentProvider.selectedAddress,
+                        value: 1000000
+                    })
+                    .on('transactionHash', (hash) => {
+
+                    })
+                    .on('confirmation', (confirmationNumber, receipt) => {
+
+                    })
+                    .on('receipt', (receipt) => {
+                        // receipt example
+                        console.log(receipt.events["Receipt"]); // 打印回执中的指定事件
+
+                        var evt = receipt.events["Receipt"];
+                        if (evtctx != null) {
+                            console.log(web3.eth.abi.decodeLog(evtctx, // 解析并打印事件内数据
+                                evt.raw.data,
+                                evt.raw.topics.slice(1)));
+                        }
+
+                    })
+                    .on('error', console.error);
+
+                return
                 // send
                 //myContract.methods.publish(web3.utils.asciiToHex("", 32), "title", "cata", "desc", "", 100)
-                myContract.methods.publish("0x00", "title", "cata", "desc", "", 100)
+                myContract.methods.publish("0x00", "proj1", "cata1", "desc1", "", 1000000)
                     .send({
                         from: window.web3.currentProvider.selectedAddress
                     })

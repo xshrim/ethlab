@@ -191,7 +191,7 @@ contract Coop {
         return string(bytesStringTrimmed);
     }
     */
-    
+
     /* IPFS地址转bytes32数组(js代码)
     function ipfsHashToBytes32(ipfs_hash) {
         var h = bs58.decode(ipfs_hash).toString("hex").replace(/^1220/, "");
@@ -550,6 +550,12 @@ contract Coop {
 
         emit Receipt(sngen(id), msg.sender, id, address(0), "projectComplete", 0, block.timestamp, "");
 
+        return true;
+    }
+
+    function transfer(address payable receiver, uint amount) public payable returns (bool) {
+        receiver.transfer(amount);
+        emit Receipt(sngen(0x00), msg.sender, 0x00, receiver, "transfer", amount, block.timestamp, "");
         return true;
     }
 

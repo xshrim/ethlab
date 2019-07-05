@@ -43,7 +43,8 @@ pas = Queue()  # 待同步地址
 
 
 class Project:
-    def __init__(self, id, pid, sponsor, title, cata, desc, attachment, pratio, modules, claimers, status, timestamp, mid, txhash, tchash):
+    def __init__(self, id, pid, sponsor, title, cata, desc, attachment, pratio, modules, claimers, status, timestamp, mid, txhash,
+                 tchash):
         self.id = id
         self.pid = pid
         self.sponsor = sponsor
@@ -261,7 +262,7 @@ def conbc(passphrase="test"):
 
 # 初始化区块链节点连接
 def initNode(ip, port, user, passwd, url, path):
-    nodes[ip+":"+port] = {"ip": ip, "user": user, "passwd": passwd, "url": url, "link": conbc(url, ""), "path": path}
+    nodes[ip + ":" + port] = {"ip": ip, "user": user, "passwd": passwd, "url": url, "link": conbc(url, ""), "path": path}
 
 
 # 选择区块链连接节点
@@ -371,7 +372,8 @@ def getProject(id, mid, txhash):
         if id is None or id == "":
             return None
 
-        id, pid, sponsor, title, cata, desc, attachment, pratio, (modlen, clalen), status, timestamp = contract.functions.getProject(id).call()
+        id, pid, sponsor, title, cata, desc, attachment, pratio, (
+            modlen, clalen), status, timestamp = contract.functions.getProject(id).call()
 
         id = Web3.toHex(id)
         pid = Web3.toHex(pid)
@@ -380,7 +382,7 @@ def getProject(id, mid, txhash):
         cata = str(cata)
         desc = str(desc)
         attachment = str(attachment)
-        pratio = Web3.toInt(pratio)
+        pratio = str(Web3.toInt(pratio))
         modlen = Web3.toInt(modlen)
         clalen = Web3.toInt(clalen)
         status = Web3.toInt(status)
@@ -394,10 +396,11 @@ def getProject(id, mid, txhash):
             modules.append(modid)
 
         for i in range(clalen):
-            claid = str(contract.functions.getClaimerId(id, i).call())
+            claid = str(contract.functions.getClaimerAddr(id, i).call())
             claimers.append(claid)
 
-        proj = Project(id, pid, sponsor, title, cata, desc, attachment, pratio, modules, claimers, status, timestamp, mid, txhash, txhash)
+        proj = Project(id, pid, sponsor, title, cata, desc, attachment, pratio, modules, claimers, status, timestamp, mid, txhash,
+                       txhash)
 
         return proj
     except Exception as ex:
@@ -419,28 +422,33 @@ def fetchReceipt(txhash):
 def parseReceipt(receipt, mid):
     try:
         if receipt is not None and len(receipt) > 0:
-            txhash = str(Web3.toHex(receipt[0]['transactionHash']))
-            args = receipt[0]['args']
-            sn = str(Web3.toHex(args['sn']))
-            sender = str(args['from'])
-            itemid = str(Web3.toHex(args['itemid']))
-            receiver = str(args['to'])
-            # action = str(args['action'].decode('utf-8')).replace('\x00', '')
-            action = str(args['action'])
-            amount = Web3.toInt(args['amount'])
-            timestamp = Web3.toInt(args['timestamp'])
-            details = str(args['details'])
-            if details != "":
-                details = eval(details)
-
-            mid = mid / 10000.0
-            log = Log(sn, sender, itemid, receiver, action, amount, timestamp, details, mid, txhash, txhash)
-
-            jslogs = [log.show()]
+            jslogs = []
             jsprojs = []
+            itemids = set()
+            for rcpt in receipt:
+                txhash = str(Web3.toHex(rcpt['transactionHash']))
+                args = rcpt['args']
+                sn = str(Web3.toHex(args['sn']))
+                sender = str(args['from'])
+                itemid = str(Web3.toHex(args['itemid']))
+                receiver = str(args['to'])
+                # action = str(args['action'].decode('utf-8')).replace('\x00', '')
+                action = str(args['action'])
+                amount = str(Web3.toInt(args['amount']))
+                timestamp = Web3.toInt(args['timestamp'])
+                details = str(args['details'])
+                if details != "":
+                    details = eval(details)
 
-            if True:
+                itemids.add(itemid)
+
+                mid = mid / 10000.0
+                log = Log(sn, sender, itemid, receiver, action, amount, timestamp, details, mid, txhash, txhash)
+                jslogs.append(log.show())
+
+            for itemid in itemids:
                 proj = getProject(itemid, mid, txhash)
+                print(proj)
                 jsproj = proj.show()
                 if not action.startswith('publish'):
                     del jsproj["mid"]
@@ -566,7 +574,11 @@ def write(info):
                 if key == "project":
                     res = db[key].update_one({"id": value['id']}, {"$set": value}, upsert=True)
                 elif key == "log":
-                    res = db[key].update_one({"sn": value['sn'], "action": value['action']}, {"$set": value}, upsert=True)
+                    res = db[key].update_one({
+                        "sn": value['sn'],
+                        "itemid": value['itemid'],
+                        "action": value['action']
+                    }, {"$set": value}, upsert=True)
         ''' 复制集用
         with db.client.start_session() as session:
             # dbset = session.client.rsdb.latest
