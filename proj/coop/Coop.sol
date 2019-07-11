@@ -599,6 +599,7 @@ contract Coop {
     */
     function liquidate(bytes32 sn, bytes32 id, uint pratio) public payable returns (bool) {
         uint amount = pratio;
+        uint rmount = amouint;
 
         Project memory proj = projects[id];
         if (msg.sender.balance < amount) {
@@ -608,15 +609,15 @@ contract Coop {
         for (uint i = 0; i < proj.modules.length; i++) {
             Project memory sproj = projects[proj.modules[i]];
             uint tamount = amount * sproj.pratio / 100;
-            amount -= tamount;
+            rmount -= tamount;
             if (liquidate(sn, sproj.id, tamount) != true) {
                 return false;
             }
         }
 
-        proj.sponsor.transfer(amount);
+        proj.sponsor.transfer(rmount);
 
-        emit Receipt(sn, msg.sender, id, proj.sponsor, "liquidate", amount, block.timestamp, "");
+        emit Receipt(sn, msg.sender, id, proj.sponsor, "liquidate", rmount, block.timestamp, "");
 
         return true;
     }
